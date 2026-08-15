@@ -69,15 +69,17 @@ export NLTK_DATA="$PWD/tools/official_evaluation/nltk_data"
 
 ## 3. 运行 baseline 与 Adapter 推理
 
-正式跑 1,034 条前先冒烟 5 条。以 V100 的 S4 baseline 为例：
+正式跑 1,034 条前先冒烟 5 条。以下为 V100 示例；RTX 4090 把硬件参数改为 `4090`：
 
 ```bash
 python -u scripts/predict.py \
-  --config configs/v100/evaluation/base_s4.yaml \
+  --config configs/evaluation/base_s4.yaml \
+  --hardware v100 \
   --limit 5
 
 python -u scripts/predict.py \
-  --config configs/v100/evaluation/base_s4.yaml \
+  --config configs/evaluation/base_s4.yaml \
+  --hardware v100 \
   --resume
 ```
 
@@ -85,11 +87,13 @@ S4 Adapter：
 
 ```bash
 python -u scripts/predict.py \
-  --config configs/v100/evaluation/s4_adapter.yaml \
+  --config configs/evaluation/s4_adapter.yaml \
+  --hardware v100 \
   --limit 5
 
 python -u scripts/predict.py \
-  --config configs/v100/evaluation/s4_adapter.yaml \
+  --config configs/evaluation/s4_adapter.yaml \
+  --hardware v100 \
   --resume
 ```
 
@@ -102,7 +106,7 @@ max_new_tokens=512
 batch_size=1
 ```
 
-预测逐条写入 `results/evaluation/v100/<name>/predictions.jsonl`，中断后可用 `--resume` 继续。
+预测逐条写入 `results/evaluation/<name>/predictions.jsonl`，中断后可用 `--resume` 继续。
 
 ## 4. 运行 EM、EX 与 TSA
 
@@ -111,8 +115,8 @@ batch_size=1
 ```bash
 env NLTK_DATA="$PWD/tools/official_evaluation/nltk_data" \
 python scripts/evaluate_predictions.py \
-  --predictions results/evaluation/v100/s4_adapter/predictions.jsonl \
-  --output-dir results/evaluation/v100/s4_adapter/official_metrics \
+  --predictions results/evaluation/s4_adapter/predictions.jsonl \
+  --output-dir results/evaluation/s4_adapter/official_metrics \
   --test-suite-db tools/official_evaluation/test_suite_databases/database
 ```
 

@@ -7,12 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from sqlpilot.training.config import load_training_config
-from sqlpilot.training.preflight import (
+from sqlpilot.preflight import (
     analyze_jsonl,
     enforce_length_safety,
     validate_dataset_identity,
 )
+from sqlpilot.training_config import load_training_config
 
 
 class FakeTokenizer:

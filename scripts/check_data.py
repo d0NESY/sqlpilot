@@ -14,7 +14,7 @@ DEFAULT_DATA_ROOT = PROJECT_ROOT / "data" / "raw" / "spider_data"
 DEFAULT_REPORT_ROOT = PROJECT_ROOT / "data" / "processed" / "reports"
 sys.path.insert(0, str(SRC_ROOT))
 
-from sqlpilot.data import (  # noqa: E402
+from sqlpilot.data_validation import (  # noqa: E402
     load_known_invalid_gold,
     run_spider_data_check,
     write_invalid_jsonl,

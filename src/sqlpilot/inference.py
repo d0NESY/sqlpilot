@@ -11,10 +11,9 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any, Mapping
 
-from sqlpilot.data import sha256_file, write_json
-from sqlpilot.hub import resolve_model_source
-
-from .config import EvaluationConfig
+from .data_validation import sha256_file, write_json
+from .evaluation_config import EvaluationConfig
+from .hub import resolve_model_source
 from .prediction import extract_sql, load_prediction_records
 
 

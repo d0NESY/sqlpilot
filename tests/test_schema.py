@@ -8,7 +8,8 @@ import unittest
 from contextlib import closing
 from pathlib import Path
 
-from sqlpilot.data import parse_sqlite_schema, serialize_schema
+from sqlpilot.schema_parser import parse_sqlite_schema
+from sqlpilot.schema_serializer import serialize_schema
 
 
 class SchemaTestCase(unittest.TestCase):

@@ -1,6 +1,0 @@
-# SQLPilot on RTX 4090 / NVIDIA GB10, Linux x86-64, Python 3.11.
-# Modern GPUs use the CUDA 12.8 PyTorch wheel.
---extra-index-url https://download.pytorch.org/whl/cu128
-
-torch==2.11.0+cu128
--r requirements.in

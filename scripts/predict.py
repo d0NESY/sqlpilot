@@ -11,8 +11,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from sqlpilot.evaluation.config import load_evaluation_config  # noqa: E402
-from sqlpilot.evaluation.inference import run_predictions  # noqa: E402
+from sqlpilot.evaluation_config import load_evaluation_config  # noqa: E402
+from sqlpilot.hardware import apply_evaluation_hardware  # noqa: E402
+from sqlpilot.inference import run_predictions  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
@@ -20,6 +21,12 @@ def parse_args() -> argparse.Namespace:
         description="SQLPilot baseline/Adapter 确定性批量推理"
     )
     parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument(
+        "--hardware",
+        choices=("v100", "4090"),
+        default=None,
+        help="覆盖推理精度；V100 使用 FP16，RTX 4090 使用 BF16",
+    )
     parser.add_argument(
         "--resume",
         action="store_true",
@@ -36,7 +43,10 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    config = load_evaluation_config(args.config, PROJECT_ROOT)
+    config = apply_evaluation_hardware(
+        load_evaluation_config(args.config, PROJECT_ROOT),
+        args.hardware,
+    )
     result = run_predictions(config, resume=args.resume, limit=args.limit)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

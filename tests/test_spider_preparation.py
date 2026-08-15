@@ -9,15 +9,16 @@ import unittest
 from contextlib import closing
 from pathlib import Path
 
-from sqlpilot.data import (
+from sqlpilot.schema_linker import extract_schema_link, serialize_schema_link
+from sqlpilot.schema_parser import parse_sqlite_schema
+from sqlpilot.schema_serializer import serialize_schema
+from sqlpilot.spider_schema import (
     compare_spider_and_sqlite_schema,
-    extract_schema_link,
-    load_or_create_value_cache,
     parse_spider_schema_entry,
-    parse_sqlite_schema,
+)
+from sqlpilot.value_sampler import (
+    load_or_create_value_cache,
     sample_database_values,
-    serialize_schema,
-    serialize_schema_link,
 )
 
 

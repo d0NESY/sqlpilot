@@ -11,5 +11,6 @@ max_input_length: 4096
 max_new_tokens: 512
 batch_size: 1
 load_in_4bit: true
+# V100 默认 false；传 --hardware 4090 时自动覆盖为 true。
 bf16: false
 seed: 42

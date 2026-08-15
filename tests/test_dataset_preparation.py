@@ -7,12 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from sqlpilot.data import (
+from sqlpilot.dataset_preparation import (
     IndexedSpiderSample,
     load_indexed_samples,
     split_by_database,
 )
-from sqlpilot.data.data_validation import sha256_text
+from sqlpilot.data_validation import sha256_text
 
 
 class DatasetPreparationTestCase(unittest.TestCase):

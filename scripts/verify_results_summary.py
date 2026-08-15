@@ -9,7 +9,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SUMMARY = PROJECT_ROOT / "results_summary" / "official_metrics.json"
-DEFAULT_RAW_ROOT = PROJECT_ROOT / "results" / "evaluation" / "v100"
+DEFAULT_RAW_ROOT = PROJECT_ROOT / "results" / "evaluation"
 
 
 def _load_json(path: Path) -> dict[str, object]:
@@ -23,13 +23,30 @@ def _assert_equal(label: str, public: object, raw: object) -> None:
         raise ValueError(f"{label} 不一致：public={public!r}, raw={raw!r}")
 
 
+def _locate_raw_root(raw_root: Path, names: list[str]) -> Path:
+    """兼容当前扁平输出和早期按硬件归档的本地结果。"""
+
+    for candidate in (raw_root, raw_root / "v100"):
+        if all(
+            (candidate / name / "official_metrics" / "metrics.json").is_file()
+            for name in names
+        ):
+            return candidate
+    raise FileNotFoundError(f"找不到完整原始指标目录：{raw_root}")
+
+
 def verify(summary_path: Path, raw_root: Path) -> dict[str, object]:
     summary = _load_json(summary_path)
     benchmark = summary["benchmark"]
     source_hashes = summary["official_source_sha256"]
     checked: list[str] = []
+    experiments = summary["experiments"]
+    raw_root = _locate_raw_root(
+        raw_root,
+        [experiment["name"] for experiment in experiments],
+    )
 
-    for experiment in summary["experiments"]:
+    for experiment in experiments:
         name = experiment["name"]
         raw = _load_json(raw_root / name / "official_metrics" / "metrics.json")
         _assert_equal(f"{name}.status", experiment["status"], raw["status"])

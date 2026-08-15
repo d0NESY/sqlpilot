@@ -7,14 +7,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from sqlpilot.evaluation.config import load_evaluation_config
-from sqlpilot.evaluation.official import _overall_metric
-from sqlpilot.evaluation.prediction import (
+from sqlpilot.evaluation_config import load_evaluation_config
+from sqlpilot.official_evaluation import _overall_metric
+from sqlpilot.prediction import (
     INVALID_SQL,
     extract_sql,
     materialize_official_predictions,
 )
-from sqlpilot.evaluation.spider import prepare_spider_dev_evaluation
+from sqlpilot.spider_evaluation import prepare_spider_dev_evaluation
 
 
 class EvaluationTestCase(unittest.TestCase):

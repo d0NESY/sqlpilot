@@ -14,10 +14,10 @@ DEFAULT_DATA_ROOT = PROJECT_ROOT / "data" / "raw" / "spider_data"
 # 让脚本在项目包尚未安装时也能直接运行。
 sys.path.insert(0, str(SRC_ROOT))
 
-from sqlpilot.data import (  # noqa: E402
+from sqlpilot.spider_schema import load_spider_schema_catalog  # noqa: E402
+from sqlpilot.training_data import (  # noqa: E402
     SpiderTrainingDataBuilder,
     load_spider_samples,
-    load_spider_schema_catalog,
     write_jsonl,
 )
 
