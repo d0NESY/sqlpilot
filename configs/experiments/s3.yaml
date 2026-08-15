@@ -11,6 +11,7 @@ expected_eval_sha256: 29a2985975a599be30c2b6a210a8d52bc719c48adb025f9f935f993ea2
 max_length: 4096
 num_train_epochs: 3
 gradient_accumulation_steps: 16
+# 默认复现实验用 V100；传 --hardware 4090 会切换为 BF16 + TF32。
 bf16: false
 fp16: true
 tf32: false

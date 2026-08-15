@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-from sqlpilot.training.train_qlora import (
+from sqlpilot.train_qlora import (
     _prepare_trainable_parameters_for_mixed_precision,
 )
 

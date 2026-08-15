@@ -10,15 +10,14 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any
 
-from sqlpilot.data import write_json
-from sqlpilot.hub import resolve_model_source
-
-from .config import TrainingConfig
+from .data_validation import write_json
+from .hub import resolve_model_source
 from .preflight import (
     analyze_jsonl,
     enforce_length_safety,
     validate_dataset_identity,
 )
+from .training_config import TrainingConfig
 
 
 TRACKED_PACKAGES = (

@@ -19,16 +19,18 @@ DEFAULT_EXCLUSIONS = (
 )
 sys.path.insert(0, str(SRC_ROOT))
 
-from sqlpilot.data import (  # noqa: E402
-    load_indexed_samples,
+from sqlpilot.data_validation import (  # noqa: E402
     load_known_invalid_gold,
-    load_spider_schema_catalog,
-    prepare_experiment_datasets,
     run_spider_data_check,
-    split_by_database,
     write_invalid_jsonl,
     write_json,
 )
+from sqlpilot.dataset_preparation import (  # noqa: E402
+    load_indexed_samples,
+    prepare_experiment_datasets,
+    split_by_database,
+)
+from sqlpilot.spider_schema import load_spider_schema_catalog  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:

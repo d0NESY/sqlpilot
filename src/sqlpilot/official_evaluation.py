@@ -9,8 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from sqlpilot.data import sha256_file, write_json
-
+from .data_validation import sha256_file, write_json
 from .prediction import load_prediction_records, materialize_official_predictions
 
 

@@ -8,7 +8,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from sqlpilot.data import sha256_file
+from .data_validation import sha256_file
 
 
 def _percentile(sorted_values: list[int], percentile: float) -> int:

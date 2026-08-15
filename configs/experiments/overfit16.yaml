@@ -15,4 +15,8 @@ gradient_accumulation_steps: 1
 logging_steps: 1
 eval_steps: 20
 save_steps: 20
+# 默认复现实验用 V100；传 --hardware 4090 会切换为 BF16 + TF32。
+bf16: false
+fp16: true
+tf32: false
 seed: 42

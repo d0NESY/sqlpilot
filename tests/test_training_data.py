@@ -9,11 +9,11 @@ import unittest
 from contextlib import closing
 from pathlib import Path
 
-from sqlpilot.data import (
+from sqlpilot.spider_schema import parse_spider_schema_entry
+from sqlpilot.training_data import (
     SpiderTrainingDataBuilder,
     load_spider_samples,
     normalize_gold_sql,
-    parse_spider_schema_entry,
     write_jsonl,
 )
 

@@ -1,6 +1,6 @@
 # 官方结果摘要
 
-这里保存适合公开提交的聚合结果与复现证据。数字来自本地完整 `results/evaluation/v100/` 中五组通过状态的 `official_metrics/metrics.json`，但已移除用户名、服务器绝对路径、运行命令和官方评估器的运行时副本。
+这里保存适合公开提交的聚合结果与复现证据。数字来自本地完整 `results/evaluation/` 中五组通过状态的 `official_metrics/metrics.json`，但已移除用户名、服务器绝对路径、运行命令和官方评估器的运行时副本。核对脚本也兼容早期保存在 `v100/` 子目录中的归档。
 
 ## Spider dev 结果
 

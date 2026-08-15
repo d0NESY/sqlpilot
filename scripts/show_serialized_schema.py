@@ -14,7 +14,8 @@ DEFAULT_DATA_ROOT = PROJECT_ROOT / "data" / "raw" / "spider_data"
 # 让这个教学脚本在尚未安装项目包时也能直接运行。
 sys.path.insert(0, str(SRC_ROOT))
 
-from sqlpilot.data import parse_sqlite_schema, serialize_schema  # noqa: E402
+from sqlpilot.schema_parser import parse_sqlite_schema  # noqa: E402
+from sqlpilot.schema_serializer import serialize_schema  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:

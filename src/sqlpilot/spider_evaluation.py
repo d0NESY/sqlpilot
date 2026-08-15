@@ -6,10 +6,9 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
-from sqlpilot.data.data_validation import sha256_file, sha256_text, write_json
-from sqlpilot.data.training_data import load_spider_samples, normalize_gold_sql
-
+from .data_validation import sha256_file, sha256_text, write_json
 from .prediction import extract_sql
+from .training_data import load_spider_samples, normalize_gold_sql
 
 
 def _portable_path(path: Path) -> str:

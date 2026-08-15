@@ -1,10 +1,10 @@
-# SQLPilot：Qwen2.5-Coder-3B 的 Text-to-SQL QLoRA
+# SQLPilot：Qwen2.5-Coder-3B Text-to-SQL QLoRA
 
-SQLPilot 是一个面向 Spider 1.0 的端到端 Text-to-SQL 实验项目，覆盖数据校验、四级输入增强、4-bit QLoRA 训练、断点续跑推理，以及官方 EM、EX、TSA 评测。基础模型固定为 `Qwen/Qwen2.5-Coder-3B-Instruct` 的指定 commit，正式实验在单张 NVIDIA V100 上完成。
+SQLPilot 是一个面向 Spider 1.0 的完整 Text-to-SQL 实验项目，覆盖数据校验、四级输入增强、4-bit QLoRA 训练、可恢复推理，以及官方 EM、EX、TSA 评测。正式实验使用固定 revision 的 `Qwen/Qwen2.5-Coder-3B-Instruct`，在单张 NVIDIA V100 上完成。
 
 ## 最终结果
 
-所有结果均在完整 Spider 官方 dev（1,034 条）上，由固定 commit 的 Spider 与 Test Suite 官方脚本计算。S4 Schema Link 获得最佳综合结果：**EM 65.09%、EX 72.73%、TSA 70.12%**。
+全部结果均来自完整 Spider 官方 dev（1,034 条）和固定版本的官方评估器。
 
 | 实验 | 输入策略 | EM (%) | EX (%) | TSA (%) | 格式有效率 (%) |
 |---|---|---:|---:|---:|---:|
@@ -14,77 +14,57 @@ SQLPilot 是一个面向 Spider 1.0 的端到端 Text-to-SQL 实验项目，覆�
 | S3 | 结构化 Schema + 示例值 | 64.02 | 72.73 | 69.44 | 100.00 |
 | S4 | Schema Link | **65.09** | **72.73** | **70.12** | 99.90 |
 
-相对同 Prompt 的零样本 Base-S4，最终 S4 分别提升 **35.79、38.69、15.28 个百分点**。S1→S4 的 EM 与 TSA 持续上升，EX 在 S3 与 S4 持平。脱敏后的机器可读指标、哈希与复现边界见 [results_summary](results_summary/README.md)。
+S4 相对同 Prompt 的零样本 Base-S4 提升 35.79 EM、38.69 EX、15.28 TSA 个百分点。机器可读指标和评估哈希见 [results_summary](results_summary/README.md)。
 
-> Base-S4 只构成 S4 的严格同 Prompt 零样本对照；项目没有为 S1–S3 分别运行同格式 baseline，因此不能把各阶段相对 Base-S4 的差异完全解释为单一输入策略的因果增益。
+> Base-S4 只构成 S4 的严格同 Prompt 对照；S1–S3 没有分别运行匹配 baseline，因此不能把它们相对 Base-S4 的差异完全解释为单一输入策略的因果增益。
 
-## 项目内容
-
-- 对 Spider 训练集、dev、Schema 与 SQLite 数据库做一致性检查，并按数据库隔离内部验证集；
-- 构造 DDL、结构化 Schema、示例值和 Schema Link 四组训练输入；
-- 使用 4-bit NF4、completion-only loss 和 LoRA 完成 S1–S4 消融训练；
-- 固定模型 revision、随机种子、精度策略和生成参数；
-- 推理结果逐条落盘，支持中断后安全续跑；
-- 封装固定版本的 Spider EM/EX 与 Test Suite TSA 官方评估器；
-- 记录输入、Gold、官方脚本和预测文件的 SHA-256，便于复核。
-
-## 实验设置
-
-| 项目 | 设置 |
-|---|---|
-| 基础模型 | `Qwen/Qwen2.5-Coder-3B-Instruct` |
-| 模型 revision | `488639f1ff808d1d3d0ba301aef8c11461451ec5` |
-| 训练 / 内部验证 / 官方 dev | 7,939 / 717 / 1,034 |
-| 量化 | 4-bit NF4，double quant |
-| LoRA | `r=16`，`alpha=32`，`dropout=0.05` |
-| 上下文 | 4,096 tokens，拒绝截断 |
-| 训练 | 3 epochs，batch 1，gradient accumulation 16 |
-| 优化器 | paged AdamW 8-bit，学习率 `2e-4`，cosine schedule |
-| 推理 | greedy，`num_beams=1`，`max_new_tokens=512` |
-| 正式硬件 | NVIDIA V100，FP16，BF16/TF32 关闭 |
-| 随机种子 | 42 |
-
-Token 预检没有发现超过 4,096-token 上限的样本：
-
-| 数据 | train P99 | train 最大值 | 截断数 |
-|---|---:|---:|---:|
-| S1 DDL | 2,106 | 2,249 | 0 |
-| S2 结构化 | 2,398 | 2,541 | 0 |
-| S3 示例值 | 3,429 | 3,572 | 0 |
-| S4 Schema Link | 3,463 | 3,638 | 0 |
-
-## 目录结构
+## 项目结构
 
 ```text
-configs/                  # 通用、V100 与现代 GPU 配置
-scripts/                  # 数据、训练、推理、评估和环境冻结入口
-src/sqlpilot/             # 核心实现
-tests/                    # 数据、配置、训练与评测测试
-results_summary/          # 可公开的脱敏结果证据
-EVALUATION.md             # 官方评测闭环
-HARDWARE_PROFILES.md      # 不同 GPU 的环境与精度说明
+configs/
+├── data/                 # 已知无效 Gold 的精确排除记录
+├── experiments/          # S1-S4、过拟合和冒烟训练配置
+└── evaluation/           # baseline 与 Adapter 推理配置
+results_summary/          # 可公开的脱敏指标与哈希
+scripts/                  # 数据、训练、推理和官方评测入口
+src/sqlpilot/             # 扁平化核心模块
+tests/                    # 单元与一致性测试
 ```
 
-`data/`、`checkpoints/`、`logs/`、完整 `results/`、TSA 数据库和官方评估器副本不会提交到 Git；它们可由数据准备、训练和评测脚本生成，或应放在独立制品存储中。
+原始数据、checkpoint、完整日志、逐条预测、TSA 数据库和官方评估器副本均由 `.gitignore` 排除。
 
 ## 安装
 
-推荐在 Linux GPU 服务器使用 Python 3.11：
+项目只保留一个依赖文件 `requirements.txt`。V100 与 RTX 4090 仅在 PyTorch wheel 和计算精度上不同：
+
+| GPU | PyTorch | 训练精度 | TF32 |
+|---|---|---|---|
+| Tesla V100 | CUDA 12.6 wheel | FP16 | 关闭 |
+| RTX 4090 | CUDA 12.8 wheel | BF16 | 开启 |
 
 ```bash
 conda create -n sqlpilot python=3.11 -y
 conda activate sqlpilot
+
+# V100：二选一
+pip install torch==2.11.0+cu126 \
+  --index-url https://download.pytorch.org/whl/cu126
+
+# RTX 4090：二选一
+pip install torch==2.11.0+cu128 \
+  --index-url https://download.pytorch.org/whl/cu128
+
+# 其余依赖两种 GPU 共用
 pip install -r requirements.txt
 pip install -e .
+
 python scripts/validate_training_stack.py
 python -m pytest -q
 ```
 
-锁定的训练栈及 V100、RTX 4090/GB10 对应命令见 [HARDWARE_PROFILES.md](HARDWARE_PROFILES.md)。无 Hugging Face 网络时，需要提前复制上述模型 commit 的完整缓存，并设置 `HF_HUB_OFFLINE=1`。
-
 ## 数据准备
 
-本仓库不重新分发 Spider 或 TSA 数据库。取得 Spider 1.0 数据后，将其放到配置指定的 `data/raw/spider_data/`，然后运行：
+本仓库不重新分发 Spider 或 TSA 数据库。取得 Spider 1.0 后，将数据放到 `data/raw/spider_data/`，然后运行：
 
 ```bash
 python scripts/check_data.py
@@ -92,54 +72,71 @@ python scripts/prepare_training_data.py --skip-data-check
 python scripts/prepare_evaluation_data.py
 ```
 
-数据流水线会验证训练与 dev 数据库隔离、Gold SQL、Schema/SQLite 对照、样本数量和内容哈希。生成的 1,034 条官方 dev 只用于最终评估，不会传给训练器。
+流水线会验证训练/dev 数据库隔离、Gold SQL、Schema/SQLite 对照、样本数量和内容哈希。生成的 1,034 条官方 dev 只用于最终评估。
 
-## 训练
+## 训练与推理
 
-每组正式训练前先执行预检：
+配置文件名与硬件无关。通过统一参数选择计算精度：
 
 ```bash
-python scripts/train.py --config configs/v100/experiments/s1.yaml --preflight-only
-python scripts/train.py --config configs/v100/experiments/s1.yaml
+# V100
+python scripts/train.py \
+  --config configs/experiments/s4.yaml \
+  --hardware v100
 
-python scripts/train.py --config configs/v100/experiments/s2.yaml
-python scripts/train.py --config configs/v100/experiments/s3.yaml
-python scripts/train.py --config configs/v100/experiments/s4.yaml
+# RTX 4090
+python scripts/train.py \
+  --config configs/experiments/s4.yaml \
+  --hardware 4090
 ```
 
-预检会核对数据哈希、固定模型 revision、chat template、EOS、completion-only loss、Token 长度和 dev 隔离。训练器保留内部验证损失最低的 checkpoint，并在结束时回载对应 Adapter。
-
-## 推理与官方评测
-
-以 V100 上的 S4 为例：
+推理使用同样的参数：
 
 ```bash
-python -u scripts/predict.py \
-  --config configs/v100/evaluation/s4_adapter.yaml \
+python scripts/predict.py \
+  --config configs/evaluation/s4_adapter.yaml \
+  --hardware v100 \
   --resume
+```
 
+也可以用一个脚本串行完成 baseline、S1–S4 预检、训练和推理：
+
+```bash
+# 参数依次为硬件与物理 GPU 编号
+nohup bash scripts/run_pipeline.sh v100 2 \
+  > logs/pipeline.log 2>&1 < /dev/null &
+
+# RTX 4090 示例
+nohup bash scripts/run_pipeline.sh 4090 0 \
+  > logs/pipeline.log 2>&1 < /dev/null &
+```
+
+无 Hugging Face 网络时，提前复制固定模型 revision 的完整缓存；流水线默认设置 `HF_HUB_OFFLINE=1`，联网运行可设置 `SQLPILOT_OFFLINE=0`。
+
+## 官方评测
+
+```bash
 python scripts/evaluate_predictions.py \
-  --predictions results/evaluation/v100/s4_adapter/predictions.jsonl \
-  --output-dir results/evaluation/v100/s4_adapter/official_metrics \
+  --predictions results/evaluation/s4_adapter/predictions.jsonl \
+  --output-dir results/evaluation/s4_adapter/official_metrics \
   --test-suite-db tools/official_evaluation/test_suite_databases/database
 ```
 
-官方评估器的安装、离线 NLTK 资源和完整 baseline/Adapter 命令见 [EVALUATION.md](EVALUATION.md)。
+官方评估器、TSA 数据库与 NLTK 离线资源的准备方式见 [EVALUATION.md](EVALUATION.md)。模型自行预测查询值，不启用 `--plug_value`；遵循官方默认，不启用 `--keep_distinct`。
 
-## 结果与制品策略
+## 可复现性
 
-公开仓库仅保留聚合指标、哈希、配置和复现脚本：
-
-- `results_summary/metrics.csv`：适合直接查看和制图的结果表；
-- `results_summary/official_metrics.json`：实验输入哈希、官方脚本版本及评测策略；
-- `configs/`：所有正式实验配置；
-- `scripts/`、`src/`、`tests/`：完整训练和评测实现。
-
-完整日志、逐条模型输出与 Adapter checkpoint 可能体积较大，且环境文件可能含本机绝对路径，因此默认不进入 Git。需要公开时，应先脱敏并通过 GitHub Release、对象存储或模型仓库单独发布，同时记录其 SHA-256。
+- 基础模型 revision：`488639f1ff808d1d3d0ba301aef8c11461451ec5`；
+- 训练 / 内部验证 / 官方 dev：7,939 / 717 / 1,034；
+- 4-bit NF4、double quant、LoRA `r=16`、`alpha=32`、`dropout=0.05`；
+- 4,096-token 上限，completion-only loss，拒绝截断；
+- 3 epochs，batch 1，gradient accumulation 16，随机种子 42；
+- 贪心解码，`num_beams=1`，`max_new_tokens=512`；
+- 官方代码、Gold、Schema、数据集和预测文件均记录 SHA-256。
 
 ## 局限
 
-- 正式训练只运行了随机种子 42，当前结果不包含多种子均值与方差；
-- 只完成了 S4 Prompt 的零样本 baseline，S1–S3 没有各自的严格同 Prompt baseline；
+- 正式训练只运行了随机种子 42，没有多种子均值与方差；
+- 只完成了 S4 Prompt 的匹配零样本 baseline；
 - 尚未加入执行反馈修复、跨数据集鲁棒性评测或系统性错误分类；
-- Spider 与基础模型受各自许可证约束，使用者应自行核对数据与模型的授权条件。
+- Spider 与基础模型受各自许可证约束，使用者应自行核对授权条件。
