@@ -1,0 +1,6 @@
+# SQLPilot on Tesla V100 (Volta, sm_70), Linux x86-64, Python 3.11.
+# CUDA 12.6 PyTorch wheels retain support for sm_70.
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+torch==2.11.0+cu126
+-r requirements.in

@@ -1,0 +1,15 @@
+experiment_name: modern_qlora_s2_structured_seed42
+model_name: Qwen/Qwen2.5-Coder-3B-Instruct
+model_revision: "488639f1ff808d1d3d0ba301aef8c11461451ec5"
+dataset_file: data/processed/datasets/s2_structured/official_dev_evaluation_only.jsonl
+output_dir: results/evaluation/modern/s2_adapter
+expected_records: 1034
+expected_dataset_sha256: 59a4f7d5bc2827f495e2e5352e1ef0339c129dec4bca3ddbe997ad7a3d78b6d4
+output_mode: direct
+adapter_path: checkpoints/modern/s2_structured/seed42
+max_input_length: 4096
+max_new_tokens: 512
+batch_size: 1
+load_in_4bit: true
+bf16: true
+seed: 42

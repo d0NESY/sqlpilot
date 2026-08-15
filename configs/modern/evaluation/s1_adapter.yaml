@@ -1,0 +1,15 @@
+experiment_name: modern_qlora_s1_ddl_seed42
+model_name: Qwen/Qwen2.5-Coder-3B-Instruct
+model_revision: "488639f1ff808d1d3d0ba301aef8c11461451ec5"
+dataset_file: data/processed/datasets/s1_ddl/official_dev_evaluation_only.jsonl
+output_dir: results/evaluation/modern/s1_adapter
+expected_records: 1034
+expected_dataset_sha256: b735f819d5895354bcb3f51e8db7cf76935e4171e1c5639acf47efb71b8cfd4f
+output_mode: direct
+adapter_path: checkpoints/modern/s1_ddl/seed42
+max_input_length: 4096
+max_new_tokens: 512
+batch_size: 1
+load_in_4bit: true
+bf16: true
+seed: 42

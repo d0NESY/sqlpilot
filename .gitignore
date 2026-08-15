@@ -1,0 +1,53 @@
+# 原始数据、数据库与派生数据不随代码仓库分发。
+data/raw/
+data/processed/
+data/cache/
+data/evaluation/
+*.sqlite
+*.sqlite3
+*.db
+
+# 模型、训练产物和完整实验记录保留在本地或独立制品存储。
+checkpoints/
+results/
+logs/
+tmp/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+
+# 官方评估器、TSA 数据库和下载压缩包由脚本按固定版本安装。
+tools/official_evaluation/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# 本地调试历史可能包含机器名、用户名和绝对路径。
+history1.md
+
+# 凭据和本地环境。
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+.preflight-venv/
+
+# Python 临时文件与构建产物。
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# 编辑器和操作系统文件。
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

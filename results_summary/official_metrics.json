@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "benchmark": {
+    "name": "Spider 1.0",
+    "split": "dev",
+    "record_count": 1034,
+    "gold_sql_sha256": "0b14e99791ebc59741608e68d1d73a6dbb75556c435faa3f4dce816b90c96661",
+    "tables_json_sha256": "61bb20aa401f03164e2d7f3b16509b7b5f79cc9c943ca7bd159046df1159e2ed"
+  },
+  "model": {
+    "name": "Qwen/Qwen2.5-Coder-3B-Instruct",
+    "revision": "488639f1ff808d1d3d0ba301aef8c11461451ec5"
+  },
+  "evaluation_policy": {
+    "values": "model_predicts_values; --plug_value disabled",
+    "distinct": "official default; --keep_distinct disabled",
+    "decoding": {
+      "do_sample": false,
+      "num_beams": 1,
+      "max_new_tokens": 512,
+      "batch_size": 1
+    }
+  },
+  "official_repositories": {
+    "spider": {
+      "url": "https://github.com/taoyds/spider.git",
+      "commit": "b7b5b8c890cd30e35427348bb9eb8c6d1350ca7c"
+    },
+    "test-suite-sql-eval": {
+      "url": "https://github.com/taoyds/test-suite-sql-eval.git",
+      "commit": "e97acc546ecbee8fa27fa8dbf025ef61493a876c"
+    }
+  },
+  "official_source_sha256": {
+    "spider": {
+      "evaluation.py": "5261ecbd632142b785b19f69e477b0792fcafab35c0565a4cc2a59266fa0d343",
+      "process_sql.py": "c743a93d02c6b91c426e102c370a84c7e770b4b65348c1239e88f77aafd927a2"
+    },
+    "test_suite": {
+      "exec_subprocess.py": "32cee7675bc573c1504a9bf55f013d0b2fc85489d5082955a1cc2f160f93743a",
+      "evaluate_classical.py": "423e76fae137670c5b059490f2847ce8758a6d122a103d4be1dabd3782562663",
+      "exec_eval.py": "93cd3da27089d377c94601dd261fbd103f4c4a275e66d4749621711b3704f530",
+      "parse.py": "a2fbd98f3b87325780f65c6a8d9e80240bf1da44ab5cd45d3e4869bc9bd7885d",
+      "evaluation.py": "42661e4e35b6821010bdd4fc47b098a23760955e7f12922821aaa1b25a933e48",
+      "process_sql.py": "44acc15c9944543c2ac4f1848d83116dc859495b2c0570b3d785163ed076f4ee"
+    }
+  },
+  "experiments": [
+    {
+      "name": "base_s4",
+      "display_name": "Base-S4",
+      "input_strategy": "schema_link",
+      "model_kind": "baseline",
+      "status": "passed",
+      "record_count": 1034,
+      "metrics_percent": {"em": 29.30, "ex": 34.04, "tsa": 54.84},
+      "format_valid_count": 1029,
+      "format_valid_percent": 99.52,
+      "input_sha256": {
+        "dataset": "66460569c42c31d7ca4508b9077f870d3f35aff9e6ab9d686ae73c3eb7dcd79c",
+        "predictions_jsonl": "1839422ff7d47771214730221919145c42260353bc10b55bfa2c2a904113704c",
+        "pred_sql": "040d7fe963f756fe9be809e595b124485bfae31f29be2598d19aec2f6dd502ab"
+      }
+    },
+    {
+      "name": "s1_adapter",
+      "display_name": "S1 DDL",
+      "input_strategy": "ddl",
+      "model_kind": "adapter",
+      "status": "passed",
+      "record_count": 1034,
+      "metrics_percent": {"em": 59.67, "ex": 70.89, "tsa": 66.54},
+      "format_valid_count": 1034,
+      "format_valid_percent": 100.00,
+      "input_sha256": {
+        "dataset": "b735f819d5895354bcb3f51e8db7cf76935e4171e1c5639acf47efb71b8cfd4f",
+        "predictions_jsonl": "76063b3e999a55a58c8c4f5364c49e050adaac73ec353fb492639da47c3e225e",
+        "pred_sql": "dec8067400cf2dab67fef0cd3670ce45bd5bb573b8dd55bca9d7687d03070d1c"
+      }
+    },
+    {
+      "name": "s2_adapter",
+      "display_name": "S2 Structured",
+      "input_strategy": "structured_schema",
+      "model_kind": "adapter",
+      "status": "passed",
+      "record_count": 1034,
+      "metrics_percent": {"em": 62.77, "ex": 71.18, "tsa": 67.02},
+      "format_valid_count": 1034,
+      "format_valid_percent": 100.00,
+      "input_sha256": {
+        "dataset": "59a4f7d5bc2827f495e2e5352e1ef0339c129dec4bca3ddbe997ad7a3d78b6d4",
+        "predictions_jsonl": "caad123d669b7fa5cd79ee028503a1320fa48e0e14dbba3fd9013b3d7e569930",
+        "pred_sql": "d2eff768acc05e05dbd96975f425b60c67f50b797b971cf3adf651bfd12f2639"
+      }
+    },
+    {
+      "name": "s3_adapter",
+      "display_name": "S3 Values",
+      "input_strategy": "structured_schema_with_sample_values",
+      "model_kind": "adapter",
+      "status": "passed",
+      "record_count": 1034,
+      "metrics_percent": {"em": 64.02, "ex": 72.73, "tsa": 69.44},
+      "format_valid_count": 1034,
+      "format_valid_percent": 100.00,
+      "input_sha256": {
+        "dataset": "d33c53e45f18221f865df510fbc3f7716adbd26c2a1687cb81a84437c4fb3610",
+        "predictions_jsonl": "dcaf764ff9bd5cbce0ff87362ec7f5dc24d22cb964205e736d05192f95526083",
+        "pred_sql": "1b04e6fc08f674ad2b031d32405ef9f8e58001a3a934bc821b6bbc643b5d9f7f"
+      }
+    },
+    {
+      "name": "s4_adapter",
+      "display_name": "S4 Schema Link",
+      "input_strategy": "schema_link",
+      "model_kind": "adapter",
+      "status": "passed",
+      "record_count": 1034,
+      "metrics_percent": {"em": 65.09, "ex": 72.73, "tsa": 70.12},
+      "format_valid_count": 1033,
+      "format_valid_percent": 99.90,
+      "input_sha256": {
+        "dataset": "66460569c42c31d7ca4508b9077f870d3f35aff9e6ab9d686ae73c3eb7dcd79c",
+        "predictions_jsonl": "ef169a47436e44d48d00e7d40cde1d42e93ad36d1459e813b655511eaf430765",
+        "pred_sql": "14c501a49340ae30d5a945f2692ddca19a085b5efb293f490c244032e0926398"
+      }
+    }
+  ],
+  "limitations": [
+    "Only random seed 42 was run; no multi-seed mean or variance is reported.",
+    "Base-S4 is a matched zero-shot baseline only for the S4 prompt.",
+    "Raw logs, per-example predictions, databases and checkpoints are intentionally excluded from Git."
+  ]
+}

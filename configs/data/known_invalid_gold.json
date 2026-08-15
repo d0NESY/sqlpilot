@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "description": "Spider 1.0 官方训练集中无法在随附 SQLite 数据库执行的 Gold SQL。保留原始数据，不静默改写；训练数据构造时按 source、index 和 query_sha256 精确排除。",
+  "entries": [
+    {
+      "source": "train_spider",
+      "index": 3153,
+      "db_id": "assets_maintenance",
+      "query_sha256": "662ce602839d1757c3cd459671f84b49b107e8cfc901e254f49f5c6c4dc380b2",
+      "reason": "Gold SQL 引用了 tables.json 和 SQLite 中均不存在的 Ref_Company_Types 表。"
+    },
+    {
+      "source": "train_spider",
+      "index": 4513,
+      "db_id": "document_management",
+      "query_sha256": "9148b44cb702265fb814cde71ce4ecaccdad2e01df8c9c1585c765b14e815d72",
+      "reason": "SQLite 不允许在 INTERSECT 左分支内直接使用该位置的 ORDER BY ... LIMIT。"
+    },
+    {
+      "source": "train_spider",
+      "index": 4514,
+      "db_id": "document_management",
+      "query_sha256": "9148b44cb702265fb814cde71ce4ecaccdad2e01df8c9c1585c765b14e815d72",
+      "reason": "与上一条相同的官方无效 Gold SQL，对应不同自然语言问题。"
+    }
+  ]
+}

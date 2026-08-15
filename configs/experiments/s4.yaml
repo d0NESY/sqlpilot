@@ -1,0 +1,17 @@
+experiment_name: s4_schema_link_seed42
+model_name: Qwen/Qwen2.5-Coder-3B-Instruct
+model_revision: "488639f1ff808d1d3d0ba301aef8c11461451ec5"
+train_file: data/processed/datasets/s4_schema_link/train.jsonl
+eval_file: data/processed/datasets/s4_schema_link/validation.jsonl
+output_dir: checkpoints/s4_schema_link/seed42
+expected_train_records: 7939
+expected_eval_records: 717
+expected_train_sha256: f6cb7f9e13b543b5e84db37f7066a21848912712ebcafa9e1e10e4a827ffd20a
+expected_eval_sha256: c4088cb25e7e14bd9617bd8d5f98140fef0e4c3e2b5ecc208ac8a3c76f17447b
+max_length: 4096
+num_train_epochs: 3
+gradient_accumulation_steps: 16
+bf16: false
+fp16: true
+tf32: false
+seed: 42

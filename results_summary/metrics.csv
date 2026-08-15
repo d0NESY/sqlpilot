@@ -1,0 +1,6 @@
+experiment,input_strategy,model_kind,record_count,em_percent,ex_percent,tsa_percent,format_valid_count,format_valid_percent
+base_s4,Schema Link prompt,baseline,1034,29.30,34.04,54.84,1029,99.52
+s1_adapter,DDL,adapter,1034,59.67,70.89,66.54,1034,100.00
+s2_adapter,structured schema,adapter,1034,62.77,71.18,67.02,1034,100.00
+s3_adapter,structured schema plus sampled values,adapter,1034,64.02,72.73,69.44,1034,100.00
+s4_adapter,Schema Link,adapter,1034,65.09,72.73,70.12,1033,99.90

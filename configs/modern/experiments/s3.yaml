@@ -1,0 +1,17 @@
+experiment_name: modern_s3_values_seed42
+model_name: Qwen/Qwen2.5-Coder-3B-Instruct
+model_revision: "488639f1ff808d1d3d0ba301aef8c11461451ec5"
+train_file: data/processed/datasets/s3_values/train.jsonl
+eval_file: data/processed/datasets/s3_values/validation.jsonl
+output_dir: checkpoints/modern/s3_values/seed42
+expected_train_records: 7939
+expected_eval_records: 717
+expected_train_sha256: 8c7f914281c54f72a1533d8a9224f37d968e273f189da2aae665abb611a532d6
+expected_eval_sha256: 29a2985975a599be30c2b6a210a8d52bc719c48adb025f9f935f993ea26be017
+max_length: 4096
+num_train_epochs: 3
+gradient_accumulation_steps: 16
+bf16: true
+fp16: false
+tf32: true
+seed: 42
