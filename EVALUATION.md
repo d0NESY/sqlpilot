@@ -47,7 +47,7 @@ https://drive.google.com/file/d/1mkCx2GOFIqNesD4y8TDAO1yX1QZORP5w/view
 tools/official_evaluation/test_suite_databases/database
 ```
 
-若服务器不能访问 GitHub，可以在联网机器上先运行安装脚本，再将整个 `tools/official_evaluation/` 目录复制到服务器；固定 commit 和文件哈希仍应保留。
+若服务器不能访问 GitHub，可以在联网机器上先运行安装脚本，再将整个 `tools/official_evaluation/` 目录复制到服务器；固定 commit 仍应保留。
 
 ### NLTK 离线资源
 
@@ -129,7 +129,7 @@ official_test_suite_tsa.log
 metrics.json
 ```
 
-`metrics.json` 记录官方脚本源文件 SHA-256、输入哈希、执行命令、EM/EX/TSA 与格式合规率。评测策略固定为：
+`metrics.json` 记录评测输入、执行命令、EM/EX/TSA 与格式合规率。评测策略固定为：
 
 - 模型自行预测查询值，不启用 `--plug_value`；
 - 遵循官方默认，不启用 `--keep_distinct`；
@@ -138,14 +138,14 @@ metrics.json
 
 ## 5. 公开结果
 
-完整 `results/` 和 `logs/` 默认不提交 Git。发布前只从每组 `official_metrics/metrics.json` 提取聚合指标、哈希和固定版本信息，去除绝对路径、运行命令中的用户名及机器环境。当前公开摘要位于：
+完整 `results/` 和 `logs/` 默认不提交 Git。发布前只从每组 `official_metrics/metrics.json` 提取聚合指标和固定版本信息，去除绝对路径、运行命令中的用户名及机器环境。当前公开摘要位于：
 
 ```text
 results_summary/metrics.csv
 results_summary/official_metrics.json
 ```
 
-原始预测、日志与 checkpoint 如需共享，应作为独立制品发布，并附 SHA-256；不要直接提交官方数据库、模型权重或含本机路径的环境快照。
+原始预测、日志与 checkpoint 如需共享，应作为独立制品发布；不要直接提交官方数据库、模型权重或含本机路径的环境快照。
 
 ## 公平性约束
 

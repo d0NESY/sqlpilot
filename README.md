@@ -14,7 +14,7 @@ SQLPilot 是一个面向 Spider 1.0 的完整 Text-to-SQL 实验项目，覆盖�
 | S3 | 结构化 Schema + 示例值 | 64.02 | 72.73 | 69.44 | 100.00 |
 | S4 | Schema Link | **65.09** | **72.73** | **70.12** | 99.90 |
 
-S4 相对同 Prompt 的零样本 Base-S4 提升 35.79 EM、38.69 EX、15.28 TSA 个百分点。机器可读指标和评估哈希见 [results_summary](results_summary/README.md)。
+S4 相对同 Prompt 的零样本 Base-S4 提升 35.79 EM、38.69 EX、15.28 TSA 个百分点。机器可读指标见 [results_summary](results_summary/README.md)。
 
 > Base-S4 只构成 S4 的严格同 Prompt 对照；S1–S3 没有分别运行匹配 baseline，因此不能把它们相对 Base-S4 的差异完全解释为单一输入策略的因果增益。
 
@@ -25,7 +25,7 @@ configs/
 ├── data/                 # 已知无效 Gold 的精确排除记录
 ├── experiments/          # S1-S4、过拟合和冒烟训练配置
 └── evaluation/           # baseline 与 Adapter 推理配置
-results_summary/          # 可公开的脱敏指标与哈希
+results_summary/          # 可公开的脱敏指标
 scripts/                  # 数据、训练、推理和官方评测入口
 src/sqlpilot/             # 扁平化核心模块
 tests/                    # 单元与一致性测试
@@ -72,7 +72,7 @@ python scripts/prepare_training_data.py --skip-data-check
 python scripts/prepare_evaluation_data.py
 ```
 
-流水线会验证训练/dev 数据库隔离、Gold SQL、Schema/SQLite 对照、样本数量和内容哈希。生成的 1,034 条官方 dev 只用于最终评估。
+流水线会验证训练/dev 数据库隔离、Gold SQL、Schema/SQLite 对照和样本数量。生成的 1,034 条官方 dev 只用于最终评估。
 
 ## 训练与推理
 
@@ -132,7 +132,6 @@ python scripts/evaluate_predictions.py \
 - 4,096-token 上限，completion-only loss，拒绝截断；
 - 3 epochs，batch 1，gradient accumulation 16，随机种子 42；
 - 贪心解码，`num_beams=1`，`max_new_tokens=512`；
-- 官方代码、Gold、Schema、数据集和预测文件均记录 SHA-256。
 
 ## 局限
 

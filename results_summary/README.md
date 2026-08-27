@@ -17,7 +17,7 @@ S4 相对同 Prompt 的 Base-S4 提升 35.79 EM、38.69 EX、15.28 TSA 个百分
 ## 文件说明
 
 - `metrics.csv`：便于表格软件、绘图脚本和简历材料直接使用；
-- `official_metrics.json`：包含指标、输入哈希、模型 revision、官方仓库 commit 与官方脚本哈希。
+- `official_metrics.json`：包含指标、模型 revision 与官方仓库 commit。
 
 若本地仍保留完整原始结果，可在提交前核对摘要没有抄录错误：
 
@@ -25,11 +25,11 @@ S4 相对同 Prompt 的 Base-S4 提升 35.79 EM、38.69 EX、15.28 TSA 个百分
 python scripts/verify_results_summary.py
 ```
 
-所有实验使用完整 1,034 条 Spider 1.0 dev。`status` 均为 `passed`，Gold SQL、`tables.json` 和官方评估脚本的哈希在五次运行中一致。模型自行预测查询值，未启用 `--plug_value`；评估遵循默认 distinct 策略，未启用 `--keep_distinct`。
+所有实验使用完整 1,034 条 Spider 1.0 dev，`status` 均为 `passed`。模型自行预测查询值，未启用 `--plug_value`；评估遵循默认 distinct 策略，未启用 `--keep_distinct`。
 
 ## 未公开的本地制品
 
-下列内容由 `.gitignore` 排除：完整逐条预测、原始日志、运行环境快照、官方评估器运行时副本、Spider/TSA 数据库和 Adapter checkpoint。它们适合本地留档或单独发布为带 SHA-256 的 Release/模型制品，不适合直接放入代码仓库。
+下列内容由 `.gitignore` 排除：完整逐条预测、原始日志、运行环境快照、官方评估器运行时副本、Spider/TSA 数据库和 Adapter checkpoint。它们适合本地留档或单独发布为 Release/模型制品，不适合直接放入代码仓库。
 
 ## 解释边界
 
